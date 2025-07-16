@@ -33,11 +33,11 @@ This is a simple, lightweight project for making cross-compilation toolchain wit
 
 ## How to use
 
-Download the tarball from the [release page](https://github.com/cross-tools/musl-cross/releases) and extract it to `/opt/x-tools`:
+Download the tarball from the [release page](https://github.com/cross-tools/musl-cross/releases) and extract it to `/Users/lihanguang/.mise/installs/musl-cross-gcc/20250520`:
 
 ```sh
-sudo mkdir -p /opt/x-tools
-sudo tar -xf ${target}.tar.xz -C /opt/x-tools
+sudo mkdir -p /Users/lihanguang/.mise/installs/musl-cross-gcc/20250520
+sudo tar -xf ${target}.tar.xz -C /Users/lihanguang/.mise/installs/musl-cross-gcc/20250520
 ```
 
 ## How to build

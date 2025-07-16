@@ -5,33 +5,33 @@ set -e
 TARGET=$1
 
 # packages
-sudo apt-get update
-sudo apt-get install -y --no-install-recommends \
-  automake \
-  bison \
-  bzip2 \
-  ca-certificates \
-  curl \
-  file \
-  flex \
-  g++ \
-  gawk \
-  gdb \
-  git \
-  gperf \
-  help2man \
-  libncurses-dev \
-  libssl-dev \
-  libtool-bin \
-  make \
-  patch \
-  pkg-config \
-  python3 \
-  rsync \
-  texinfo \
-  unzip \
-  wget \
-  xz-utils
+# sudo apt-get update
+# sudo apt-get install -y --no-install-recommends \
+#   automake \
+#   bison \
+#   bzip2 \
+#   ca-certificates \
+#   curl \
+#   file \
+#   flex \
+#   g++ \
+#   gawk \
+#   gdb \
+#   git \
+#   gperf \
+#   help2man \
+#   libncurses-dev \
+#   libssl-dev \
+#   libtool-bin \
+#   make \
+#   patch \
+#   pkg-config \
+#   python3 \
+#   rsync \
+#   texinfo \
+#   unzip \
+#   wget \
+#   xz-utils
 
 # patch
 pushd builder
@@ -45,27 +45,31 @@ done
 popd
 
 # crosstool-ng
-sudo mkdir -p /opt
-sudo chmod 0777 /opt
-sudo rm -rf /opt/ct-ng
+mkdir -p /Users/lihanguang/.mise/installs/musl-cross-gcc
+sudo chown -R $(id -u):$(id -g) /Users/lihanguang/.mise/installs/musl-cross-gcc
+sudo chmod -R u+w /Users/lihanguang/.mise/installs/musl-cross-gcc
+# sudo mkdir -p /opt
+# sudo chmod 0777 /opt
+# sudo rm -rf /opt/ct-ng
 pushd builder
 ./bootstrap
-./configure --prefix=/opt/ct-ng
+CURSES_LIBS="$(pkgconf --libs ncursesw)" CURSES_CFLAGS="$(pkgconf --cflags ncursesw)" ./configure --prefix=/Users/lihanguang/.mise/installs/musl-cross-gcc/20250520
 make -j`nproc`
-sudo make install
+make install
 popd
 
 # build
-rm -rf build
-mkdir -p build
-cp targets/${TARGET}/config build/.config
-pushd build
-/opt/ct-ng/bin/ct-ng olddefconfig
-/opt/ct-ng/bin/ct-ng build
+build_dir=build_${TARGET}
+rm -rf ${build_dir}
+mkdir -p ${build_dir}
+cp targets/${TARGET}/config ${build_dir}/.config
+pushd ${build_dir}
+/Users/lihanguang/.mise/installs/musl-cross-gcc/20250520/bin/ct-ng olddefconfig
+/Users/lihanguang/.mise/installs/musl-cross-gcc/20250520/bin/ct-ng build
 popd
 
 # tarball
-sudo mv /opt/x-tools/${TARGET} .
-sudo chown -R root:root ${TARGET}
-sudo tar -cJvf ${TARGET}.tar.xz ${TARGET}
-sudo sha256sum ${TARGET}.tar.xz | awk '{ print $1 }' > ${TARGET}.tar.xz.sha256
+# sudo mv /Users/lihanguang/.mise/installs/musl-cross-gcc/20250520/${TARGET} .
+# sudo chown -R root:root ${TARGET}
+# sudo tar -cJvf ${TARGET}.tar.xz ${TARGET}
+# sudo sha256sum ${TARGET}.tar.xz | awk '{ print $1 }' > ${TARGET}.tar.xz.sha256
